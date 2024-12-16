@@ -34,7 +34,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/quasar-user-options.js"  ],
   "exclude": [
     "node_modules"
   ]

@@ -86,10 +86,9 @@ import SlideMenu from "./views/layout/Slide-Menu.vue";
 import CqHeader from "./views/layout/Cq-Header.vue";
 import { ref } from "vue";
 
-const leftDrawerOpen = ref(false);
+const leftDrawerOpen = ref(true);
 
-const switchMenu = (value: string) => {
-  console.log("HI!switchMenu", value);
+const switchMenu = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 };
 </script>

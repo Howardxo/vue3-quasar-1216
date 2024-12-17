@@ -1,84 +1,144 @@
 <template>
-  <div class="q-pa-md" style="max-width: 400px">
-    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-      <q-input
-        filled
-        v-model="name"
-        label="Your name *"
-        hint="Name and surname"
-        lazy-rules
-        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
-      />
+  <q-page padding>
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">產品表單</div>
+        <div class="text-subtitle2">請輸入產品資訊</div>
+      </q-card-section>
 
-      <q-input
-        filled
-        type="number"
-        v-model="age"
-        label="Your age *"
-        lazy-rules
-        :rules="[
-          (val) => (val !== null && val !== '') || 'Please type your age',
-          (val) => (val > 0 && val < 100) || 'Please type a real age',
-        ]"
-      />
+      <q-card-section>
+        <q-form ref="formRef" @submit="submitForm" @reset="resetForm">
+          <!-- 產品名稱 -->
+          <q-input
+            v-model="formData.name"
+            label="產品名稱"
+            :rules="[rules.required]"
+            outlined
+            dense
+            clearable
+          />
 
-      <q-toggle v-model="accept" label="I accept the license and terms" />
+          <!-- 價格 -->
+          <q-input
+            v-model.number="formData.price"
+            label="價格 (NTD)"
+            type="number"
+            :rules="[rules.required, rules.positiveNumber]"
+            outlined
+            dense
+            clearable
+          />
 
-      <div>
-        <q-btn label="Submit" type="submit" color="primary" />
-        <q-btn
-          label="Reset"
-          type="reset"
-          color="primary"
-          flat
-          class="q-ml-sm"
-        />
-      </div>
-    </q-form>
-  </div>
+          <!-- 描述 -->
+          <q-input
+            v-model="formData.description"
+            label="產品描述"
+            type="textarea"
+            :rules="[rules.required]"
+            outlined
+            dense
+          />
+
+          <!-- 類別 -->
+          <q-select
+            v-model="formData.category"
+            label="類別"
+            :options="categories"
+            :rules="[rules.required]"
+            outlined
+            dense
+          />
+
+          <!-- 是否有庫存 -->
+          <q-checkbox v-model="formData.inStock" label="有庫存" />
+
+          <!-- 按鈕 -->
+          <div class="q-mt-md">
+            <q-btn
+              label="提交"
+              color="primary"
+              type="submit"
+              class="full-width"
+            />
+            <q-btn
+              label="Reset"
+              type="reset"
+              color="secondary"
+              flat
+              class="full-width q-mt-sm"
+            />
+          </div>
+        </q-form>
+      </q-card-section>
+    </q-card>
+  </q-page>
 </template>
 
-<script>
-import { useQuasar } from "quasar";
+<script setup>
 import { ref } from "vue";
+import { useQuasar } from "quasar";
+const $q = useQuasar();
 
-export default {
-  setup() {
-    const $q = useQuasar();
+// 表單數據
+const formData = ref({
+  name: "",
+  price: null,
+  description: "",
+  category: null,
+  inStock: false,
+});
 
-    const name = ref(null);
-    const age = ref(null);
-    const accept = ref(false);
+// 類別選項
+const categories = ref([
+  { label: "電子產品", value: "electronics" },
+  { label: "服飾", value: "apparel" },
+  { label: "家居用品", value: "home" },
+  { label: "書籍", value: "books" },
+]);
 
-    return {
-      name,
-      age,
-      accept,
+// Quasar 驗證規則
+const rules = {
+  required: (val) => !!val || "此為必填項",
+  positiveNumber: (val) => val > 0 || "價格必須大於零",
+};
 
-      onSubmit() {
-        if (accept.value !== true) {
-          $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
-            message: "You need to accept the license and terms first",
-          });
-        } else {
-          $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "Submitted",
-          });
-        }
-      },
+// 提交表單
+const submitForm = async () => {
+  console.log("formData.value", formData.value);
+  const validateData = {
+    ...formData.value,
+    category: "",
+  };
+  try {
+    const temp = await rules.validate(validateData, { abortEarly: false });
+    console.log(temp);
+    $q.notify({ type: "positive", message: "產品資訊已成功提交！" });
+    console.log("表單數據:", validateData); // 模擬提交
+  } catch (err) {
+    console.log("err", err);
+    // 顯示驗證錯誤
+    const errors = err.inner.map((e) => e.message);
+    errors.forEach((error) => {
+      $q.notify({ type: "negative", message: error });
+    });
+  }
+};
 
-      onReset() {
-        name.value = null;
-        age.value = null;
-        accept.value = false;
-      },
-    };
-  },
+// 重置表單
+const resetForm = () => {
+  formData.value = {
+    name: "",
+    price: null,
+    description: "",
+    category: null,
+    inStock: false,
+  };
+  $q.notify({ type: "info", message: "表單已重置" });
 };
 </script>
+
+<style scoped>
+.full-width {
+  width: 100%;
+}
+</style>

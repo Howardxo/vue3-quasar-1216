@@ -1,0 +1,63 @@
+[
+    {
+      "id": "1",
+      "title": "功能區塊 1",
+      "description": "這裡可以放置一些功能區塊的描述，例如報表、分析等。",
+      "buttonLabel": "查看詳細"
+    },
+    {
+      "id": "2",
+      "title": "功能區塊 2",
+      "description": "這裡可以放置其他功能的描述，例如用戶管理、設定等。",
+      "buttonLabel": "查看詳細"
+    },
+    {
+      "id": "3",
+      "title": "功能區塊 3",
+      "description": "用於展示統計數據，例如儀表板、趨勢圖等。",
+      "buttonLabel": "立即查看"
+    },
+    {
+      "id": "4",
+      "title": "功能區塊 4",
+      "description": "這裡提供系統通知、公告及系統日誌。",
+      "buttonLabel": "查看詳情"
+    },
+    {
+      "id": "5",
+      "title": "功能區塊 5",
+      "description": "支援文件與說明區域，包含使用手冊與指南。",
+      "buttonLabel": "閱讀文件"
+    },
+    {
+      "id": "6",
+      "title": "功能區塊 6",
+      "description": "管理設定與自定義選項，例如主題和偏好設置。",
+      "buttonLabel": "設定"
+    },
+    {
+      "id": "7",
+      "title": "功能區塊 7",
+      "description": "系統維護工具，支援數據備份與恢復。",
+      "buttonLabel": "開始維護"
+    },
+    {
+      "id": "8",
+      "title": "功能區塊 8",
+      "description": "分析報告區，提供用戶行為和業務分析結果。",
+      "buttonLabel": "查看報告"
+    },
+    {
+      "id": "9",
+      "title": "功能區塊 9",
+      "description": "用於檢查系統性能和操作紀錄，確保運行穩定。",
+      "buttonLabel": "檢查狀態"
+    },
+    {
+      "id": "10",
+      "title": "功能區塊 10",
+      "description": "專門提供即時聊天與客服支援，解決使用者問題。",
+      "buttonLabel": "聯絡客服"
+    }
+  ]
+  

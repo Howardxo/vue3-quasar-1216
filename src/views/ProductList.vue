@@ -47,32 +47,42 @@
   </q-page>
 </template>
 
-<script setup>
-import axios from "axios";
-import { ref, onMounted } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
+import apiservice from "../utils/ApiService";
 
-const products = ref([]);
+// 定義產品資料介面
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  inStock: boolean;
+}
 
-onMounted(() => {
-  axios
-    .get("/api/products.json")
-    .then(({ data }) => {
-      products.value = data; // 成功後設置產品數據
-    })
-    .catch((error) => {
-      console.error("獲取產品數據時發生錯誤:", error); // 處理錯誤
-    });
-});
+interface Products {
+  products: Product[];
+}
+
+const products = ref([] as Product[]);
+
+const fetchData = async () => {
+  const data = await apiservice.fetchApi<Products>("/api/products.json");
+  if (data?.products) {
+    products.value = data.products;
+  }
+};
 
 const addProduct = () => {
   alert("新增產品功能尚未完成");
 };
 
-const editProduct = (id) => {
+const editProduct = (id: number) => {
   alert("正在編輯產品ID: " + id);
 };
 
-const deleteProduct = (id) => {
+const deleteProduct = (id: number) => {
   alert("產品 ID: " + id + " 已刪除");
 };
+
+fetchData();
 </script>

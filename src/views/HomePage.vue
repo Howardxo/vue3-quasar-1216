@@ -39,7 +39,7 @@
           <div class="text-h6">最新資訊</div>
           <q-separator />
           <q-list>
-            <q-item v-for="(news, index) in newsList" :key="index" clickable>
+            <q-item v-for="(news, index) in newslist" :key="index" clickable>
               <q-item-section>
                 <div class="text-body1">{{ news.title }}</div>
                 <div class="text-caption">{{ news.date }}</div>
@@ -52,36 +52,51 @@
   </q-page>
 </template>
 
-<script setup>
-import axios from "axios";
-import { ref, onMounted } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
+import apiservice from "@/utils/ApiService";
 
-const features = ref([]);
-const newsList = ref([]);
-onMounted(() => {
-  axios
-    .get("/api/features.json")
-    .then(({ data }) => {
-      features.value = data;
-    })
-    .catch((error) => {
-      console.error("獲取功能區塊時發生錯誤:", error);
-    });
-  axios
-    .get("/api/newlist.json")
-    .then(({ data }) => {
-      newsList.value = data;
-    })
-    .catch((error) => {
-      console.error("獲取最新資訊時發生錯誤:", error);
-    });
-});
+interface Feature {
+  id: number;
+  title: string;
+  description: string;
+  buttonLabel: string;
+}
+
+interface News {
+  title: string;
+  date: string;
+}
+
+interface Features {
+  features: Feature[];
+}
+
+interface NewsList {
+  newslist: News[];
+}
+
+const features = ref([] as Feature[]);
+const newslist = ref([] as News[]);
+
+const fetchData = async () => {
+  const data = await apiservice.fetchApi<Features>("/api/features.json");
+  if (data?.features) {
+    features.value = data.features;
+  }
+  const data2 = await apiservice.fetchApi<NewsList>("/api/newslist.json");
+  if (data2?.newslist) {
+    newslist.value = data2.newslist;
+  }
+};
 
 // 功能區塊點擊跳轉
-const goToFeature = (featureId) => {
+const goToFeature = (featureId: number) => {
   console.log(`跳轉到功能區塊 ${featureId}`);
   // 這裡可以根據功能 ID 跳轉到相應頁面
 };
+
+fetchData();
 </script>
 
 <style scoped>
